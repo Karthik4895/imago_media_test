@@ -1,0 +1,43 @@
+### **Technologies Used**  
+
+- **Django (Django Rest Framework - DRF)**  
+- **Elasticsearch**  
+- **Elasticsearch Python Client**  
+- **Python Logging Module**  
+- **Pagination: `from` and `size`**  
+- **Testing Framework: Pytest / Django Test Framework** *(if implemented)*  
+
+
+We implemented a **Django REST API** that connects to **Elasticsearch** to retrieve media records from the `imago` index. The API supports **keyword-based search** using the `match` query on fields like `suchtext` and `fotografen`, allowing users to filter relevant media content. Pagination was handled using the **`from` and `size`** parameters.
+
+
+### What We Did:  
+We handled unstructured or missing fields by using Python’s `.get()` method to provide default values (e.g., `"N/A"`) when fields like `bildnummer`, `datum`, or `fotografen` were missing in the Elasticsearch response. This ensures the API returns consistent data without errors.  
+
+### Proposed Solution:  
+To further improve data quality, we can implement **data preprocessing** by normalizing text fields (e.g., lowercasing, removing special characters) and using **Elasticsearch’s keyword and analyzer features** to enhance search relevance. Additionally, a **background task with Celery** can validate and clean incoming data before indexing.
+
+
+
+### Identified Problem:  
+Using **`from` and `size` pagination** for large datasets leads to performance bottlenecks, as Elasticsearch has to scan and skip records, making queries slower as the dataset grows. This impacts scalability and user experience.  
+
+### Proposed Solution:  
+Switching to **`search_after`** for efficient deep pagination and **Celery for asynchronous processing** can help handle large datasets without performance degradation. Celery can queue and process large queries in the background, reducing response times and improving scalability.
+
+
+### Identified Problem:  
+We have used **`from` and `size`** for pagination, which becomes inefficient for large datasets. Elasticsearch has to scan and skip records, leading to increased query time and memory usage as the dataset grows.  
+
+### Proposed Solution:  
+To improve performance, we can replace **`from` and `size`** with **`search_after`** for deep pagination. Additionally, **Celery** can be used to handle large queries asynchronously, ensuring smooth data retrieval without blocking the API response.
+
+
+
+### Scalability & Maintainability:  
+To handle large volumes of data efficiently, we can replace **`from` and `size`** pagination with **`search_after`** for better performance. Additionally, **Celery** can be used to process heavy queries asynchronously, preventing API slowdowns. To ensure maintainability, we can implement a modular architecture with well-defined service layers, making it easier to integrate new external providers and media sources.  
+
+
+
+- **Monitoring & Logging**: Implemented logging using Python's built-in `logging` module to capture Elasticsearch queries, responses, and errors for better debugging and monitoring.  
+- **Testing**: The system should include unit tests for API responses, integration tests to verify Elasticsearch queries, and load tests to ensure the service handles large data volumes efficiently. 
