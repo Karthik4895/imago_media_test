@@ -9,10 +9,6 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/Karthik4895/imago_media_test.git'
             }
         }
-        stage('Initialize'){
-            def dockerHome = tool 'myDocker'
-            env.PATH = "${dockerHome}/bin:${env.PATH}"
-    }
 
         stage('Build Docker Image') {
             steps {
