@@ -1,26 +1,26 @@
 pipeline {
     agent any
-    triggers {
-        githubPush()  // This triggers the pipeline when changes are pushed
+    triggers{
+        githubPush()
     }
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/Karthik4895/imago_media_test.git'
+                git branch: 'main', url: 'https://github.com/Karthik4895/imago_media_test.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t imago_media_test .'
+                sh 'docker build -t imago_media .'
             }
         }
 
-        stage('Push Image to Docker Hub') {
+        stage('Push to Docker Hub') {
             steps {
                 withDockerRegistry([credentialsId: 'docker-hub-credentials', url: '']) {
-                    sh 'docker tag imago_media_test karthik4895/imago_media_test:latest'
-                    sh 'docker push karthik4895/imago_media_test:latest'
+                    sh 'docker tag imago_media karthik4895/imago_media:latest'
+                    sh 'docker push karthik4895/imago_media:latest'
                 }
             }
         }
