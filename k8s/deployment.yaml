@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: imago-media-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: imago-media
+  template:
+    metadata:
+      labels:
+        app: imago-media
+    spec:
+      containers:
+      - name: imago-media
+        image: karthik4895/imago_media_test:latest
+        ports:
+        - containerPort: 8000
